@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors'); // Import CORS package
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
@@ -9,6 +10,12 @@ const PORT = process.env.PORT || 3000; // Render assigns PORT dynamically
 console.log(`Starting server on port: ${PORT}`); // Debug log
 
 const YOUR_DOMAIN = process.env.YOUR_DOMAIN || `http://localhost:${PORT}`;
+
+// ✅ Enable CORS for all origins
+app.use(cors());
+
+// ✅ Handle preflight requests (important for certain HTTP methods like POST)
+app.options('*', cors());
 
 // Debug incoming requests
 app.use((req, res, next) => {
@@ -40,16 +47,14 @@ app.post('/create-checkout-session', async (req, res) => {
     console.log("Session created:", session.id);
     console.log("Redirecting to:", session.url);
 
-    // ✅ Correct way to redirect from backend
-    res.writeHead(303, { Location: session.url });
-    res.end();
+    // ✅ Send JSON response with the session URL (better for frontend handling)
+    res.status(200).json({ url: session.url });
 
   } catch (error) {
     console.error('Error creating checkout session:', error);
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // Catch-all for 404 errors
 app.use((req, res) => {
@@ -58,4 +63,3 @@ app.use((req, res) => {
 
 // Start the server
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
-
