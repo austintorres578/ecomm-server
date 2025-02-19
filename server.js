@@ -15,74 +15,89 @@ const YOUR_DOMAIN = process.env.YOUR_DOMAIN || `http://localhost:${PORT}`;
 app.use(cors());
 app.options('*', cors());
 
-// 🔹 Map product titles to Stripe price IDs
+// 🔹 Map product titles & purchase types to Stripe price IDs
 const productPriceMap = {
-    "Soylent complete meal - creamy chocolate": "price_1QpHTFJc865jwEq0lm8Os3fc",
-    "Soylent complete meal - vanilla bliss": "price_1QpMQSJc865jwEq0o3rJn5Lp",
-    "Soylent complete meal - cafe mocha": "price_1QpABCDc865jwEq0xyz123AB",
-    // Add more products here
+    "Soylent complete meal - creamy chocolate": {
+        "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
+        "one-time": "price_1QpXYZJc865jwEq0abc123XY"
+    },
+    "Soylent complete meal - vanilla bliss": {
+        "subscribe": "price_1QpMQSJc865jwEq0o3rJn5Lp",
+        "one-time": "price_1QpLMNJc865jwEq0xyz456LM"
+    },
+    "Soylent complete meal - cafe mocha": {
+        "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
+        "one-time": "price_1QpDEFJc865jwEq0xyz789DE"
+    }
 };
 
 // Homepage
 app.get('/', (req, res) => {
-  res.send('Hi, your server is running!');
+    res.send('Hi, your server is running!');
 });
 
-// ✅ Stripe Checkout Session (Look up price IDs)
+// ✅ Stripe Checkout Session (Look up price IDs using title & purchaseType)
 app.post('/create-checkout-session', async (req, res) => {
-  console.log("Received request to /create-checkout-session");
+    console.log("Received request to /create-checkout-session");
 
-  try {
-    const { cart } = req.body;
-    if (!cart || cart.length === 0) {
-      return res.status(400).json({ error: "Cart is empty" });
-    }
-
-    console.log("Received cart data:", JSON.stringify(cart, null, 2));
-
-    // 🔹 Convert cart items to Stripe line items
-    const lineItems = cart.map(item => {
-        const priceId = productPriceMap[item.title]; // Look up price ID
-        if (!priceId) {
-            console.error(`Error: No priceId found for ${item.title}`);
-            return null;
+    try {
+        const { cart } = req.body;
+        if (!cart || cart.length === 0) {
+            return res.status(400).json({ error: "Cart is empty" });
         }
-        return {
-            price: priceId,
-            quantity: item.quantity,
-        };
-    }).filter(item => item !== null); // Remove null items
 
-    if (lineItems.length === 0) {
-      return res.status(400).json({ error: "No valid items in cart" });
+        console.log("Received cart data:", JSON.stringify(cart, null, 2));
+
+        // 🔹 Convert cart items to Stripe line items
+        const lineItems = cart.map(item => {
+            const product = productPriceMap[item.title]; // Get product by title
+            if (!product) {
+                console.error(`Error: No product found for title: ${item.title}`);
+                return null;
+            }
+
+            const priceId = product[item.purchaseType]; // Get price based on purchaseType
+            if (!priceId) {
+                console.error(`Error: No priceId found for title: ${item.title} with purchaseType: ${item.purchaseType}`);
+                return null;
+            }
+
+            return {
+                price: priceId,
+                quantity: item.quantity,
+            };
+        }).filter(item => item !== null); // Remove null items
+
+        if (lineItems.length === 0) {
+            return res.status(400).json({ error: "No valid items in cart" });
+        }
+
+        console.log("Formatted Stripe line items:", lineItems);
+
+        // ✅ Create Stripe Checkout session
+        const session = await stripe.checkout.sessions.create({
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${YOUR_DOMAIN}/success.html`,
+            cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+            automatic_tax: { enabled: true },
+        });
+
+        console.log("Session created:", session.id);
+        console.log("Returning session URL:", session.url);
+
+        // ✅ Send checkout URL to frontend
+        res.status(200).json({ url: session.url });
+
+    } catch (error) {
+        console.error('Error creating checkout session:', error);
+        res.status(500).json({ error: error.message });
     }
-
-    console.log("Formatted Stripe line items:", lineItems);
-
-    // ✅ Create Stripe Checkout session
-    const session = await stripe.checkout.sessions.create({
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: `${YOUR_DOMAIN}/success.html`,
-      cancel_url: `${YOUR_DOMAIN}/cancel.html`,
-      automatic_tax: { enabled: true },
-    });
-
-    console.log("Session created:", session.id);
-    console.log("Returning session URL:", session.url);
-
-    // ✅ Send checkout URL to frontend
-    res.status(200).json({ url: session.url });
-
-  } catch (error) {
-    console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: error.message });
-  }
 });
 
 // Catch-all for 404 errors
 app.use((req, res) => {
-  res.status(404).send("Route Not Found");
+    res.status(404).send("Route Not Found");
 });
 
 // Start the server
