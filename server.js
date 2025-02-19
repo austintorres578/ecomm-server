@@ -47,8 +47,8 @@ app.post('/create-checkout-session', async (req, res) => {
     console.log("Session created:", session.id);
     console.log("Redirecting to:", session.url);
 
-    // ✅ Send JSON response with the session URL (better for frontend handling)
-    res.status(200).json({ url: session.url });
+    // ✅ Redirect frontend to the Stripe Checkout URL
+    res.redirect(303, session.url);
 
   } catch (error) {
     console.error('Error creating checkout session:', error);
