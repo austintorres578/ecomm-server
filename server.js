@@ -19,15 +19,27 @@ app.options('*', cors());
 const productPriceMap = {
     "Soylent complete meal - creamy chocolate": {
         "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
-        "one-time": "price_1QpXYZJc865jwEq0abc123XY"
+        "one-time": "price_1Qtep7Jc865jwEq0pGsNCNMQ"
     },
-    "Soylent complete meal - vanilla bliss": {
+    "Soylent complete meal - original": {
+        "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
+        "one-time": "price_1QtesNJc865jwEq04WdEySbs"
+    },
+    "Soylent complete meal - mint chocolate": {
+        "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
+        "one-time": "price_1QtetsJc865jwEq0o0m8la4R"
+    },
+    "Soylent complete meal - Vanilla": {
         "subscribe": "price_1QpMQSJc865jwEq0o3rJn5Lp",
-        "one-time": "price_1QpLMNJc865jwEq0xyz456LM"
+        "one-time": "price_1Qtf13Jc865jwEq0NIwXgF4x"
     },
-    "Soylent complete meal - cafe mocha": {
+    "Soylent complete meal - Banana": {
         "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
-        "one-time": "price_1QpDEFJc865jwEq0xyz789DE"
+        "one-time": "price_1Qtey3Jc865jwEq0pGa6B5M5"
+    },
+    "Soylent complete meal - Strawberry": {
+        "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
+        "one-time": "price_1QtewkJc865jwEq0Nwx7wOII"
     }
 };
 
