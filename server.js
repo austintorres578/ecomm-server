@@ -38,10 +38,7 @@ app.post('/create-checkout-session', async (req, res) => {
     });
 
     console.log("Session created:", session.id);
-    console.log("Checkout URL:", session.url);
-
-    // ✅ Send URL as JSON instead of redirecting
-    res.json({ url: session.url });
+    res.redirect(303, session.url);
   } catch (error) {
     console.error('Error creating checkout session:', error);
     res.status(500).json({ error: error.message });
