@@ -13,9 +13,7 @@ const YOUR_DOMAIN = process.env.YOUR_DOMAIN || `http://localhost:${PORT}`;
 
 // ✅ Enable CORS for all origins
 app.use(cors());
-
-// ✅ Handle preflight requests (important for certain HTTP methods like POST)
-app.options('*', cors());
+app.options('*', cors()); // Handle preflight requests
 
 // Debug incoming requests
 app.use((req, res, next) => {
@@ -28,16 +26,29 @@ app.get('/', (req, res) => {
   res.send('Hi, your server is running!');
 });
 
-// Stripe Checkout Session
+// Stripe Checkout Session (Receives Cart Data)
 app.post('/create-checkout-session', async (req, res) => {
   console.log("Received request to /create-checkout-session");
 
   try {
+    const { cart } = req.body; // ✅ Get cart data from frontend
+    if (!cart || cart.length === 0) {
+      return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    console.log("Received cart data:", cart);
+
+    // 🔹 Convert cart items into Stripe line items
+    const lineItems = cart.map(item => ({
+      price: item.priceId, // Make sure your frontend stores the correct price ID
+      quantity: item.quantity,
+    }));
+
+    console.log("Formatted Stripe line items:", lineItems);
+
+    // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
-      line_items: [
-        { price: 'price_1QpHTFJc865jwEq0lm8Os3fc', quantity: 1 },
-        { price: 'price_1QpMQSJc865jwEq0o3rJn5Lp', quantity: 1 }
-      ],
+      line_items: lineItems,
       mode: 'payment',
       success_url: `${YOUR_DOMAIN}/success.html`,
       cancel_url: `${YOUR_DOMAIN}/cancel.html`,
@@ -47,7 +58,7 @@ app.post('/create-checkout-session', async (req, res) => {
     console.log("Session created:", session.id);
     console.log("Returning session URL:", session.url);
 
-    // ✅ Send the session URL as JSON response instead of redirecting
+    // ✅ Send checkout URL to frontend
     res.status(200).json({ url: session.url });
 
   } catch (error) {
