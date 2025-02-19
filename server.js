@@ -1,4 +1,4 @@
-require('dotenv').config();  // Load environment variables at the very top
+require('dotenv').config();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const express = require('express');
@@ -6,6 +6,11 @@ const app = express();
 app.use(express.static('public'));
 
 const YOUR_DOMAIN = process.env.YOUR_DOMAIN || 'http://localhost:3000';
+
+// Serve "Hi" on the homepage
+app.get('/', (req, res) => {
+  res.send('Hi');
+});
 
 app.post('/create-checkout-session', async (req, res) => {
   try {
@@ -33,6 +38,5 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Make sure it's declared only once
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
-
