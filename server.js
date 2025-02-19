@@ -1,29 +1,35 @@
 require('dotenv').config();
-
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const express = require('express');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const app = express();
-app.use(express.static('public'));
+app.use(express.json()); // Ensures JSON body parsing
 
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN || 'http://localhost:3000';
+const PORT = process.env.PORT || 3000; // Render assigns PORT dynamically
+console.log(`Starting server on port: ${PORT}`); // Debug log
 
-// Serve "Hi" on the homepage
-app.get('/', (req, res) => {
-  res.send('Hi');
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN || `http://localhost:${PORT}`;
+
+// Debug incoming requests
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.path}`);
+  next();
 });
 
+// Homepage
+app.get('/', (req, res) => {
+  res.send('Hi, your server is running!');
+});
+
+// Stripe Checkout Session
 app.post('/create-checkout-session', async (req, res) => {
+  console.log("Received request to /create-checkout-session");
+
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
-        {
-          price: 'price_1QpHTFJc865jwEq0lm8Os3fc',
-          quantity: 1,
-        },
-        {
-          price: 'price_1QpMQSJc865jwEq0o3rJn5Lp',
-          quantity: 1,
-        }
+        { price: 'price_1QpHTFJc865jwEq0lm8Os3fc', quantity: 1 },
+        { price: 'price_1QpMQSJc865jwEq0o3rJn5Lp', quantity: 1 }
       ],
       mode: 'payment',
       success_url: `${YOUR_DOMAIN}/success.html`,
@@ -31,12 +37,19 @@ app.post('/create-checkout-session', async (req, res) => {
       automatic_tax: { enabled: true },
     });
 
+    console.log("Session created:", session.id);
     res.redirect(303, session.url);
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error.message });
   }
 });
 
-const PORT = process.env.PORT || 3000; // Make sure it's declared only once
+// Catch-all for 404 errors
+app.use((req, res) => {
+  res.status(404).send("Route Not Found");
+});
+
+// Start the server
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
