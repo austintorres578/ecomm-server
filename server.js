@@ -38,12 +38,18 @@ app.post('/create-checkout-session', async (req, res) => {
     });
 
     console.log("Session created:", session.id);
-    res.redirect(303, session.url);
+    console.log("Redirecting to:", session.url);
+
+    // ✅ Correct way to redirect from backend
+    res.writeHead(303, { Location: session.url });
+    res.end();
+
   } catch (error) {
     console.error('Error creating checkout session:', error);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Catch-all for 404 errors
 app.use((req, res) => {
