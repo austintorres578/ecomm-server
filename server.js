@@ -19,27 +19,27 @@ app.options('*', cors());
 const productPriceMap = {
     "Soylent complete meal - creamy chocolate": {
         "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
-        "one-time": "price_1Qtep7Jc865jwEq0pGsNCNMQ"
+        "one-time": "price_1QuMQgJc865jwEq0SEME1ENQ"
     },
     "Soylent complete meal - original": {
         "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
-        "one-time": "price_1QtesNJc865jwEq04WdEySbs"
+        "one-time": "price_1QuMRGJc865jwEq0LkWloA5s"
     },
     "Soylent complete meal - mint chocolate": {
         "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
-        "one-time": "price_1QtetsJc865jwEq0o0m8la4R"
+        "one-time": "price_1QuMRmJc865jwEq0usArREQK"
     },
     "Soylent complete meal - Vanilla": {
         "subscribe": "price_1QpMQSJc865jwEq0o3rJn5Lp",
-        "one-time": "price_1Qtf13Jc865jwEq0NIwXgF4x"
+        "one-time": "price_1QuMSFJc865jwEq0kontY3tj"
     },
     "Soylent complete meal - Banana": {
         "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
-        "one-time": "price_1Qtey3Jc865jwEq0pGa6B5M5"
+        "one-time": "price_1QuMSiJc865jwEq0JByvW7ny"
     },
     "Soylent complete meal - Strawberry": {
         "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
-        "one-time": "price_1QtewkJc865jwEq0Nwx7wOII"
+        "one-time": "price_1QuMT8Jc865jwEq09J7KUUXS"
     }
 };
 
