@@ -60,6 +60,9 @@ app.post('/create-checkout-session', async (req, res) => {
 
         console.log("Received cart data:", JSON.stringify(cart, null, 2));
 
+        // Get the referring page (where the request was made from)
+        const referringPage = req.headers.referer || `${YOUR_DOMAIN}/shop`; // Default to shop page
+
         // 🔹 Convert cart items to Stripe line items
         const lineItems = cart.map(item => {
             const product = productPriceMap[item.title]; // Get product by title
@@ -85,13 +88,14 @@ app.post('/create-checkout-session', async (req, res) => {
         }
 
         console.log("Formatted Stripe line items:", lineItems);
+        console.log("Returning to:", referringPage); // Log where it will return to
 
         // ✅ Create Stripe Checkout session
         const session = await stripe.checkout.sessions.create({
             line_items: lineItems,
             mode: 'payment',
             success_url: `${YOUR_DOMAIN}/success.html`,
-            cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+            cancel_url: referringPage, // ✅ Go back to where checkout was initiated
             automatic_tax: { enabled: true },
         });
 
@@ -106,6 +110,7 @@ app.post('/create-checkout-session', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // Catch-all for 404 errors
 app.use((req, res) => {
