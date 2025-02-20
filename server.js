@@ -18,27 +18,27 @@ app.options('*', cors());
 // 🔹 Map product titles & purchase types to Stripe price IDs
 const productPriceMap = {
     "Soylent complete meal - creamy chocolate": {
-        "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
+        "subscribe": "price_1QuNDVJc865jwEq0hHIvtwmT",
         "one-time": "price_1QuMQgJc865jwEq0SEME1ENQ"
     },
     "Soylent complete meal - original": {
-        "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
+        "subscribe": "price_1QuNE5Jc865jwEq0Kmztbuz2",
         "one-time": "price_1QuMRGJc865jwEq0LkWloA5s"
     },
     "Soylent complete meal - mint chocolate": {
-        "subscribe": "price_1QpHTFJc865jwEq0lm8Os3fc",
+        "subscribe": "price_1QuNEaJc865jwEq0Lb7V2wfB",
         "one-time": "price_1QuMRmJc865jwEq0usArREQK"
     },
     "Soylent complete meal - Vanilla": {
-        "subscribe": "price_1QpMQSJc865jwEq0o3rJn5Lp",
+        "subscribe": "price_1QuNFOJc865jwEq0pJKFZLQW",
         "one-time": "price_1QuMSFJc865jwEq0kontY3tj"
     },
     "Soylent complete meal - Banana": {
-        "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
+        "subscribe": "price_1QuNFkJc865jwEq0jVQfIHZf",
         "one-time": "price_1QuMSiJc865jwEq0JByvW7ny"
     },
     "Soylent complete meal - Strawberry": {
-        "subscribe": "price_1QpABCDc865jwEq0xyz123AB",
+        "subscribe": "price_1QuNG3Jc865jwEq0W7Dx6NAA",
         "one-time": "price_1QuMT8Jc865jwEq09J7KUUXS"
     }
 };
