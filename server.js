@@ -52,6 +52,8 @@ app.get('/', (req, res) => {
 app.post('/create-checkout-session', async (req, res) => {
     console.log("Received request to /create-checkout-session");
 
+    let paymentType = "payment";
+
     try {
         const { cart } = req.body;
         if (!cart || cart.length === 0) {
@@ -77,7 +79,10 @@ app.post('/create-checkout-session', async (req, res) => {
                 return null;
             }
 
-            console.log(item.purchaseType)
+            if(item.purchaseType!=='one-time'){
+                paymentType="subscription"
+            }
+            
 
             return {
                 price: priceId,
@@ -95,7 +100,7 @@ app.post('/create-checkout-session', async (req, res) => {
         // ✅ Create Stripe Checkout session
         const session = await stripe.checkout.sessions.create({
             line_items: lineItems,
-            mode: 'payment',
+            mode: paymentType,
             success_url: `${YOUR_DOMAIN}/success.html`,
             cancel_url: referringPage, // ✅ Go back to where checkout was initiated
             automatic_tax: { enabled: true },
