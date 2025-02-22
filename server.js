@@ -77,6 +77,8 @@ app.post('/create-checkout-session', async (req, res) => {
                 return null;
             }
 
+            console.log(item.purchaseType)
+
             return {
                 price: priceId,
                 quantity: item.quantity,
