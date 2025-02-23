@@ -18,28 +18,34 @@ app.options('*', cors());
 // 🔹 Map product titles & purchase types to Stripe price IDs
 const productPriceMap = {
     "Soylent complete meal - creamy chocolate": {
-        "subscribe": "price_1QuNDVJc865jwEq0hHIvtwmT",
-        "one-time": "price_1QuMQgJc865jwEq0SEME1ENQ"
+        "subscribe": "price_1Qvij1Jc865jwEq0kRwYHaXY",
+        "one-time": "price_1QuMQgJc865jwEq0SEME1ENQ",
+        "prepaid": "price_1QvijkJc865jwEq0CdVFsYpQ"
     },
     "Soylent complete meal - original": {
-        "subscribe": "price_1QuNE5Jc865jwEq0Kmztbuz2",
-        "one-time": "price_1QuMRGJc865jwEq0LkWloA5s"
+        "subscribe": "price_1Qvil6Jc865jwEq0VkcK3ZTM",
+        "one-time": "price_1QuMRGJc865jwEq0LkWloA5s",
+        "prepaid":"price_1QvilxJc865jwEq0SM5194Me"
     },
     "Soylent complete meal - mint chocolate": {
-        "subscribe": "price_1QuNEaJc865jwEq0Lb7V2wfB",
-        "one-time": "price_1QuMRmJc865jwEq0usArREQK"
+        "subscribe": "price_1QvinuJc865jwEq0rXqlaFFT",
+        "one-time": "price_1QuMRmJc865jwEq0usArREQK",
+        "prepaid":"price_1QviodJc865jwEq0v4E1FD6V"
     },
     "Soylent complete meal - Vanilla": {
-        "subscribe": "price_1QuNFOJc865jwEq0pJKFZLQW",
-        "one-time": "price_1QuMSFJc865jwEq0kontY3tj"
+        "subscribe": "price_1QvipEJc865jwEq0aVD85Lsd",
+        "one-time": "price_1QuMSFJc865jwEq0kontY3tj",
+        "prepaid":"price_1Qviq3Jc865jwEq0vJk89Yre"
     },
     "Soylent complete meal - Banana": {
-        "subscribe": "price_1QuNFkJc865jwEq0jVQfIHZf",
-        "one-time": "price_1QuMSiJc865jwEq0JByvW7ny"
+        "subscribe": "price_1QviqVJc865jwEq0MR4NBrDk",
+        "one-time": "price_1QuMSiJc865jwEq0JByvW7ny",
+        "prepaid":"price_1QviqzJc865jwEq0tJIeg71t"
     },
     "Soylent complete meal - Strawberry": {
-        "subscribe": "price_1QuNG3Jc865jwEq0W7Dx6NAA",
-        "one-time": "price_1QuMT8Jc865jwEq09J7KUUXS"
+        "subscribe": "price_1QvirwJc865jwEq0qI7UUxiA",
+        "one-time": "price_1QuMT8Jc865jwEq09J7KUUXS",
+        "prepaid":"price_1QvirVJc865jwEq0GBw9l6qo"
     }
 };
 
