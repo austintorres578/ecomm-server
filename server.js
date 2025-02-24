@@ -15,6 +15,9 @@ const YOUR_DOMAIN = process.env.YOUR_DOMAIN || `http://localhost:${PORT}`;
 app.use(cors());
 app.options('*', cors());
 
+// ✅ Serve static files (including success.html)
+app.use(express.static('public'));
+
 // 🔹 Map product titles & purchase types to Stripe price IDs
 const productPriceMap = {
     "Soylent complete meal - creamy chocolate": {
@@ -49,7 +52,7 @@ const productPriceMap = {
     }
 };
 
-// Homepage
+// ✅ Homepage
 app.get('/', (req, res) => {
     res.send('Hi, your server is running!');
 });
@@ -85,10 +88,9 @@ app.post('/create-checkout-session', async (req, res) => {
                 return null;
             }
 
-            if(item.purchaseType!=='one-time'){
-                paymentType="subscription"
+            if (item.purchaseType !== 'one-time') {
+                paymentType = "subscription";
             }
-            
 
             return {
                 price: priceId,
@@ -124,11 +126,11 @@ app.post('/create-checkout-session', async (req, res) => {
     }
 });
 
-
-// Catch-all for 404 errors
+// ✅ Catch-all for 404 errors
 app.use((req, res) => {
     res.status(404).send("Route Not Found");
 });
 
-// Start the server
+// ✅ Start the server
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
